@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+  user-service:
+    image: userservice
+    build:
+      context: ./UserService
+      dockerfile: Dockerfile
+    ports:
+      - "5000:80"
+    depends_on:
+      - postgresdb
+
+  project-service:
+    image: projectservice
+    build:
+      context: ./ProjectService
+      dockerfile: Dockerfile
+    ports:
+      - "5001:80"
+    depends_on:
+      - mongodb
+
+  postgresdb:
+    image: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: userdb
+    ports:
+      - "5432:5432"
+
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
